@@ -1,0 +1,2016 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamCore Installation Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Tailwind Docs-Inspired Design */
+        :root {
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+            --slate-950: #020617;
+            --sky-400: #38bdf8;
+            --sky-500: #0ea5e9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--slate-900);
+            color: var(--slate-300);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        /* Layout */
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar - Tailwind Style */
+        .sidebar {
+            width: 256px;
+            background: var(--slate-900);
+            border-right: 1px solid var(--slate-800);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 24px 0;
+        }
+
+        .sidebar-header {
+            padding: 0 24px 24px;
+            border-bottom: 1px solid var(--slate-800);
+            margin-bottom: 24px;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--slate-50);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--sky-400), var(--sky-500));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .nav-menu {
+            padding: 0 12px;
+        }
+
+        .nav-group {
+            margin-bottom: 24px;
+        }
+
+        .nav-group-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--slate-400);
+            padding: 0 12px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 8px 12px;
+            color: var(--slate-400);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .nav-item:hover {
+            color: var(--slate-200);
+            background: var(--slate-800);
+        }
+
+        .nav-item.active {
+            color: var(--sky-400);
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 256px;
+            padding: 48px 64px;
+            max-width: 900px;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--slate-50);
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--slate-400);
+            margin-bottom: 48px;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--slate-50);
+            margin: 48px 0 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--slate-800);
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--slate-100);
+            margin: 32px 0 16px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: var(--slate-300);
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            background: var(--slate-800);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: var(--sky-400);
+        }
+
+        /* Tab System */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Code Blocks - Tailwind Style */
+        .command-block {
+            background: var(--slate-950);
+            border: 1px solid var(--slate-800);
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .command-header {
+            background: var(--slate-800);
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--slate-700);
+        }
+
+        .command-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--slate-400);
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: none;
+            color: var(--slate-400);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.15s;
+        }
+
+        .copy-btn:hover {
+            color: var(--slate-200);
+            background: var(--slate-700);
+        }
+
+        .code-content {
+            padding: 16px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--slate-300);
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        /* Alerts - Tailwind Style */
+        .alert {
+            padding: 16px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 14px;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: rgba(56, 189, 248, 0.1);
+            border-left-color: var(--sky-400);
+            color: var(--slate-300);
+        }
+
+        .alert-warning {
+            background: rgba(251, 191, 36, 0.1);
+            border-left-color: #fbbf24;
+            color: var(--slate-300);
+        }
+
+        .alert-success {
+            background: rgba(34, 197, 94, 0.1);
+            border-left-color: #22c55e;
+            color: var(--slate-300);
+        }
+
+        .alert strong {
+            color: var(--slate-100);
+        }
+
+        /* Cards */
+        .premium-card {
+            background: var(--slate-800);
+            border: 1px solid var(--slate-700);
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        /* Task Lists */
+        .task-list {
+            margin: 20px 0;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--slate-800);
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--slate-600);
+            border-radius: 4px;
+            cursor: pointer;
+            appearance: none;
+            transition: all 0.15s;
+        }
+
+        .task-checkbox:checked {
+            background: var(--sky-500);
+            border-color: var(--sky-500);
+        }
+
+        .task-checkbox:checked::after {
+            content: '✓';
+            display: block;
+            text-align: center;
+            color: white;
+            font-size: 12px;
+            line-height: 14px;
+        }
+
+        /* Inputs */
+        .glass-input {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--slate-950);
+            border: 1px solid var(--slate-700);
+            border-radius: 6px;
+            color: var(--slate-200);
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+        }
+
+        .glass-input:focus {
+            outline: none;
+            border-color: var(--sky-500);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+        }
+
+        .btn-primary {
+            background: var(--sky-500);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-primary:hover {
+            background: var(--sky-400);
+        }
+
+        /* Progress Footer */
+        .progress-footer {
+            position: fixed;
+            bottom: 0;
+            left: 256px;
+            right: 0;
+            background: var(--slate-900);
+            border-top: 1px solid var(--slate-800);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .progress-bar-container {
+            flex: 1;
+            max-width: 300px;
+        }
+
+        .progress-bar-bg {
+            height: 6px;
+            background: var(--slate-800);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--sky-500);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            font-size: 13px;
+            color: var(--slate-400);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 220px;
+            }
+
+            .main-content {
+                margin-left: 220px;
+                padding: 32px 40px;
+            }
+
+            .progress-footer {
+                left: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 24px;
+            }
+
+            .progress-footer {
+                left: 0;
+            }
+        }
+
+        /* Utilities */
+        ul {
+            margin: 12px 0 12px 24px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: var(--sky-500);
+            color: white;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-right: 12px;
+        }
+
+        .content-header {
+            margin-bottom: 32px;
+        }
+
+        /* Feature grid removed - keeping minimal */
+        .feature-grid,
+        .feature-card,
+        .feature-icon,
+        .feature-title {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR NAVIGATION -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span>Stream</span>Core
+            </div>
+        </div>
+
+        <div class="nav-menu">
+            <div class="nav-group">
+                <div class="nav-group-title">Getting Started</div>
+                <div class="nav-item active" onclick="switchTab('welcome')" id="nav-welcome">
+                    <span class="icon">🏠</span> Welcome
+                </div>
+                <div class="nav-item" onclick="switchTab('requirements')" id="nav-requirements">
+                    <span class="icon">📋</span> Requirements
+                </div>
+            </div>
+            <div class="nav-group">
+                <div class="nav-group-title">Installation Method</div>
+                <div class="nav-item" onclick="switchTab('docker')" id="nav-docker">
+                    <span class="icon">🐳</span> Docker (Recommended)
+                </div>
+                <div class="nav-item" onclick="switchTab('manual')" id="nav-manual">
+                    <span class="icon">🛠️</span> Manual Install
+                </div>
+            </div>
+            <div class="nav-group">
+                <div class="nav-group-title">Client Apps</div>
+                <div class="nav-item" onclick="switchTab('android')" id="nav-android">
+                    <span class="icon">📱</span> Android App
+                </div>
+            </div>
+        </div>
+
+        <div
+            style="padding: 20px; font-size: 11px; color: var(--text-muted); border-top: 1px solid var(--border-color);">
+            Version 1.0.0<br>
+            StreamCore Edition
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+
+        <!-- WELCOME TAB -->
+        <div id="tab-welcome" class="tab-content active">
+            <div class="content-header">
+                <h1>Welcome to StreamCore</h1>
+                <p class="subtitle">A comprehensive IPTV/VOD streaming platform with Admin, Reseller, and User panels.
+                </p>
+            </div>
+
+            <div class="alert alert-success" style="border-left-color: #22c55e;">
+                <strong>🎉 Thank you for choosing StreamCore!</strong><br><br>
+                <strong>📦 Quick Installation?</strong> Use this <strong>Installation Guide</strong> to get StreamCore
+                up and running in minutes. Follow the sidebar menu: Requirements → Docker or Manual Install → Android
+                App.<br><br>
+                <strong>📚 Need more details?</strong> For extensive documentation including all configuration options,
+                API reference, troubleshooting, and advanced features, see the <strong>Full Documentation</strong>
+                section below.
+            </div>
+
+            <h2>📚 Full Documentation</h2>
+            <div class="premium-card" style="border-left: 4px solid var(--sky-400);">
+                <h3 style="margin-top: 0;">Complete Reference Guide</h3>
+                <p>The full documentation includes everything you need to configure, customize, and manage StreamCore:
+                </p>
+                <ul>
+                    <li><strong>Backend Environment</strong> - All .env variables explained</li>
+                    <li><strong>Frontend Environment</strong> - Next.js configuration</li>
+                    <li><strong>Android App Config</strong> - local.properties, branding, icons</li>
+                    <li><strong>Admin Panel</strong> - User management, content, settings</li>
+                    <li><strong>Reseller Panel</strong> - Credits, API keys, sub-accounts</li>
+                    <li><strong>Stripe Payments</strong> - Integration and webhooks</li>
+                    <li><strong>Email (SMTP)</strong> - Email configuration</li>
+                    <li><strong>Two-Factor Auth</strong> - Security features</li>
+                    <li><strong>API Reference</strong> - Complete API documentation</li>
+                    <li><strong>Troubleshooting</strong> - Common issues and solutions</li>
+                </ul>
+                <div style="margin-top: 16px;">
+                    <a href="documentation/index.html" target="_blank"
+                        style="display: inline-flex; align-items: center; gap: 8px; background: var(--sky-500); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+                        📖 Open Full Documentation
+                    </a>
+                </div>
+            </div>
+
+            <h2>✨ Key Features</h2>
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin: 20px 0;">
+                <div class="premium-card" style="text-align: center;">
+                    <div style="font-size: 32px; margin-bottom: 8px;">🎬</div>
+                    <h4 style="margin: 0 0 8px 0; color: var(--slate-100);">VOD & Live TV</h4>
+                    <p style="margin: 0; font-size: 13px;">Movies, Series, Live TV with EPG support</p>
+                </div>
+                <div class="premium-card" style="text-align: center;">
+                    <div style="font-size: 32px; margin-bottom: 8px;">👥</div>
+                    <h4 style="margin: 0 0 8px 0; color: var(--slate-100);">Multi-Role System</h4>
+                    <p style="margin: 0; font-size: 13px;">Admin, Reseller, User with permissions</p>
+                </div>
+                <div class="premium-card" style="text-align: center;">
+                    <div style="font-size: 32px; margin-bottom: 8px;">💳</div>
+                    <h4 style="margin: 0 0 8px 0; color: var(--slate-100);">Stripe Payments</h4>
+                    <p style="margin: 0; font-size: 13px;">Integrated credit purchase system</p>
+                </div>
+                <div class="premium-card" style="text-align: center;">
+                    <div style="font-size: 32px; margin-bottom: 8px;">📱</div>
+                    <h4 style="margin: 0 0 8px 0; color: var(--slate-100);">Android TV App</h4>
+                    <p style="margin: 0; font-size: 13px;">Native Kotlin app with Jetpack Compose</p>
+                </div>
+            </div>
+
+            <h2>🚀 Quick Start</h2>
+            <div class="premium-card">
+                <h3 style="margin-top: 0;">Installation Options</h3>
+                <p>Choose your preferred installation method:</p>
+                <ul>
+                    <li><strong>Docker (Recommended)</strong> - Fastest setup with automated SSL. Click "Docker" in the
+                        sidebar.</li>
+                    <li><strong>Manual Install</strong> - Full control over the installation. Click "Manual Install" in
+                        the sidebar.</li>
+                </ul>
+                <p style="margin-top: 16px;">After installation, configure the <strong>Android App</strong> using the
+                    "Android App" section in the sidebar.</p>
+            </div>
+
+            <h2>📋 Default Credentials</h2>
+            <div class="alert alert-warning">
+                <strong>🔐 Default Admin Account</strong><br>
+                <strong>Username:</strong> <code>admin</code><br>
+                <strong>Password:</strong> Set via <code>ADMIN_DEFAULT_PASSWORD</code> in .env, or check console output
+                for auto-generated password<br><br>
+                <span style="color: #fbbf24;">⚠️ Change this password immediately after first login!</span>
+            </div>
+
+            <h2>📂 Project Structure</h2>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">Directory Layout</span>
+                </div>
+                <div class="code-content">streamcore/
+                    ├── backend/ # Rust API server (port 3000)
+                    ├── frontend/ # Next.js web app (port 5000)
+                    ├── Apps/
+                    │ └── android_app/ # Android/TV app source
+                    ├── documentation/ # Full documentation
+                    │ └── index.html # ← Complete reference guide
+                    ├── docker-compose.yml # Docker deployment
+                    └── INSTALLATION_GUIDE.html # This file</div>
+            </div>
+        </div>
+
+        <!-- REQUIREMENTS TAB -->
+        <div id="tab-requirements" class="tab-content">
+            <div class="content-header">
+                <h1>System Requirements</h1>
+                <p class="subtitle">Minimum specifications for running StreamCore.</p>
+            </div>
+
+            <h2>Operating System</h2>
+            <div class="premium-card">
+                <h3 style="margin-top: 0;">Supported Linux Distributions</h3>
+                <ul>
+                    <li><strong>Ubuntu</strong> 20.04 LTS, 22.04 LTS, 24.04 LTS (Recommended)</li>
+                    <li><strong>Debian</strong> 11 (Bullseye), 12 (Bookworm), 13 (Trixie)</li>
+                    <li><strong>CentOS</strong> 8 Stream, 9 Stream</li>
+                    <li><strong>Rocky Linux</strong> 8, 9</li>
+                    <li><strong>AlmaLinux</strong> 8, 9</li>
+                </ul>
+                <div class="alert alert-info">
+                    <strong>Note:</strong> Ubuntu 22.04 LTS is the recommended distribution for production deployments.
+                </div>
+            </div>
+
+            <h2>Hardware Requirements</h2>
+            <div class="premium-card">
+                <h3 style="margin-top: 0;">Minimum Specifications</h3>
+                <ul>
+                    <li><strong>CPU:</strong> 2 cores (4+ recommended for production)</li>
+                    <li><strong>RAM:</strong> 4 GB minimum (8+ GB recommended)</li>
+                    <li><strong>Storage:</strong> 20 GB SSD (100+ GB for media storage)</li>
+                    <li><strong>Network:</strong> 1 Gbps (static IP recommended)</li>
+                </ul>
+            </div>
+
+            <h2>Software Dependencies</h2>
+            <div class="premium-card">
+                <h3 style="margin-top: 0;">For Docker Installation</h3>
+                <ul>
+                    <li><strong>Docker Engine</strong> 24.0+ with Docker Compose v2.20+</li>
+                </ul>
+
+                <h3>For Manual Installation</h3>
+                <ul>
+                    <li><strong>Node.js</strong> v20.x LTS or higher</li>
+                    <li><strong>Rust</strong> 1.70+ (via rustup)</li>
+                    <li><strong>Build tools:</strong> gcc, make, pkg-config, libssl-dev</li>
+                </ul>
+            </div>
+
+            <h2>Network Ports</h2>
+            <div class="premium-card">
+                <h3 style="margin-top: 0;">Required Ports</h3>
+                <ul>
+                    <li><code>80</code> - HTTP (redirects to HTTPS)</li>
+                    <li><code>443</code> - HTTPS (frontend + API)</li>
+                    <li><code>3000</code> - Backend API (internal)</li>
+                    <li><code>5000</code> - Frontend (internal)</li>
+                </ul>
+                <div class="alert alert-warning">
+                    <strong>Firewall:</strong> Ensure ports 80 and 443 are open for external access.
+                </div>
+            </div>
+        </div>
+
+        <!-- DOCKER TAB -->
+        <div id="tab-docker" class="tab-content">
+            <div class="content-header">
+                <h1>Docker Deployment</h1>
+                <p class="subtitle">Automated production deployment with NGINX and SSL.</p>
+            </div>
+
+            <!-- STEP 1: INSTALL DOCKER -->
+            <h2><span class="step-number">1</span> Install Docker</h2>
+            <p>If Docker is not installed, run this command:</p>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">Ubuntu / Debian</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">curl -fsSL https://get.docker.com | sh && sudo usermod -aG docker $USER</div>
+            </div>
+            <div class="alert alert-info">
+                <strong>Note:</strong> Log out and back in after installation for group changes to take effect.
+            </div>
+
+            <!-- STEP 2: CONFIGURE .ENV -->
+            <h2><span class="step-number">2</span> Configure Environment</h2>
+            <p>Use the Configuration Generator below to create your <code>.env</code> file. Fill in your values and
+                click "Generate .env":</p>
+
+            <div class="premium-card" style="border-left: 4px solid var(--sky-400);">
+                <!-- DOMAINS -->
+                <div style="margin-bottom: 24px;">
+                    <h4 style="margin: 0 0 12px 0; color: var(--slate-100);">🌐 Domains</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div>
+                            <label
+                                style="display: block; font-size: 12px; color: var(--slate-400); margin-bottom: 4px;">Frontend
+                                Domain</label>
+                            <input type="text" id="env-frontend-domain" class="glass-input" value="yourdomain.com" />
+                        </div>
+                        <div>
+                            <label
+                                style="display: block; font-size: 12px; color: var(--slate-400); margin-bottom: 4px;">Backend
+                                Domain</label>
+                            <input type="text" id="env-backend-domain" class="glass-input" value="api.yourdomain.com" />
+                        </div>
+                    </div>
+                    <div style="margin-top: 12px;">
+                        <label
+                            style="display: block; font-size: 12px; color: var(--slate-400); margin-bottom: 4px;">Let's
+                            Encrypt Email</label>
+                        <input type="email" id="env-email" class="glass-input" value="admin@yourdomain.com" />
+                    </div>
+                </div>
+
+                <!-- SECURITY -->
+                <div style="margin-bottom: 24px;">
+                    <h4 style="margin: 0 0 12px 0; color: var(--slate-100);">🔐 Security</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div>
+                            <label
+                                style="display: block; font-size: 12px; color: var(--slate-400); margin-bottom: 4px;">JWT
+                                Secret (min 32 chars)</label>
+                            <div style="display: flex; gap: 8px;">
+                                <input type="text" id="env-jwt" class="glass-input" value=""
+                                    placeholder="Click Generate →" style="flex: 1;" />
+                                <button onclick="generateJWT()" class="copy-btn"
+                                    style="padding: 8px 12px;">Generate</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label
+                                style="display: block; font-size: 12px; color: var(--slate-400); margin-bottom: 4px;">Admin
+                                Password</label>
+                            <input type="text" id="env-admin-password" class="glass-input" value=""
+                                placeholder="your_secure_password" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BRANDING -->
+                <div style="margin-bottom: 24px;">
+                    <h4 style="margin: 0 0 12px 0; color: var(--slate-100);">🎨 Branding</h4>
+                    <div>
+                        <label style="display: block; font-size: 12px; color: var(--slate-400); margin-bottom: 4px;">App
+                            Name (displayed in sidebar, login, etc.)</label>
+                        <input type="text" id="env-app-name" class="glass-input" value="StreamCore"
+                            style="max-width: 300px;" />
+                        <p style="font-size: 11px; color: var(--slate-500); margin-top: 4px;">
+                            ⚠️ After changing APP_NAME, run:
+                            <code>docker compose build --no-cache frontend && docker compose up -d frontend</code>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- MODE -->
+                <div style="margin-bottom: 24px;">
+                    <h4 style="margin: 0 0 12px 0; color: var(--slate-100);">⚙️ Deployment Mode</h4>
+                    <div style="display: flex; gap: 16px;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="radio" name="env-mode" value="proxy" checked onchange="updateEnvOutput()" />
+                            <span style="color: var(--slate-300);">Production (with SSL)</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="radio" name="env-mode" value="" onchange="updateEnvOutput()" />
+                            <span style="color: var(--slate-300);">Development (localhost)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- GENERATE BUTTON -->
+                <button onclick="updateEnvOutput()" class="btn-primary" style="width: 100%;">
+                    🚀 Generate .env Configuration
+                </button>
+            </div>
+
+            <!-- OUTPUT -->
+            <div class="command-block" style="margin-top: 24px;">
+                <div class="command-header">
+                    <span class="command-label">.env (Ready to Copy)</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content" id="env-output"># Click "Generate .env Configuration" above to create your
+                    config</div>
+            </div>
+
+            <!-- STEP 3: DEPLOY -->
+            <h2><span class="step-number">3</span> Deploy</h2>
+            <p>Start all services with a single command:</p>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">Terminal</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">docker compose up -d --build</div>
+            </div>
+
+            <h3>Verify Deployment</h3>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">Check Status</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">docker compose ps</div>
+            </div>
+
+            <div class="alert alert-success">
+                <strong>Done!</strong> Your StreamCore instance is now running.<br><br>
+                <strong>Production URLs:</strong>
+                <ul style="margin: 8px 0 0 20px;">
+                    <li>Frontend: <code>https://yourdomain.com</code></li>
+                    <li>API: <code>https://api.yourdomain.com</code></li>
+                </ul>
+                <br>
+                <strong>Development URLs:</strong>
+                <ul style="margin: 8px 0 0 20px;">
+                    <li>Frontend: <code>http://localhost:5000</code></li>
+                    <li>API: <code>http://localhost:3000</code></li>
+                </ul>
+            </div>
+
+            <!-- USEFUL COMMANDS -->
+            <h2>Useful Commands</h2>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">View Logs</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">docker compose logs -f</div>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">Stop Services</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">docker compose down</div>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">Rebuild & Restart</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">docker compose up -d --build --force-recreate</div>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">Rebuild Branding (after changing APP_NAME)</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">docker compose build --no-cache frontend && docker compose up -d frontend
+                </div>
+            </div>
+        </div>
+
+        <!-- MANUAL TAB -->
+        <div id="tab-manual" class="tab-content">
+            <div class="content-header">
+                <h1>Manual Installation</h1>
+                <p class="subtitle">Complete step-by-step guide for Ubuntu/Debian servers.</p>
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>Important:</strong> This guide assumes you have root access to a fresh Ubuntu 20.04+
+                or
+                Debian
+                11+ server.
+            </div>
+
+            <div class="alert alert-info">
+                <div>
+                    <strong>This manual guide matches the auto-installer.</strong>
+                    <ul style="margin: 8px 0 0 20px;">
+                        <li>Backend runs on <code>3000</code>, frontend runs on <code>5000</code></li>
+                        <li>Requires <code>Node.js v20+</code> and <code>Rust</code> (via
+                            <code>rustup</code>)
+                        </li>
+                        <li>Builds backend (<code>cargo build --release</code>) and frontend
+                            (<code>npm ci</code> +
+                            <code>npm run build</code>)
+                        </li>
+                        <li>Creates <code>iptv-backend</code> and <code>streamcore-frontend</code> systemd
+                            services
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- STEP 1: Upload Files -->
+            <h2><span class="step-number">01</span> Upload Project Files</h2>
+            <div class="task-list">
+                <label class="task-item" data-id="m-1-1">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>(Recommended) Create a dedicated user</span>
+                </label>
+                <label class="task-item" data-id="m-1-2">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Create installation directory</span>
+                </label>
+                <label class="task-item" data-id="m-1-3">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Upload <code>backend/</code> and <code>frontend/</code> folders</span>
+                </label>
+                <label class="task-item" data-id="m-1-4">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Verify folder structure</span>
+                </label>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">CREATE USER (RECOMMENDED)</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">sudo adduser --disabled-password --gecos "" streamcore
+                    sudo mkdir -p /home/streamcore
+                    sudo chown -R streamcore:streamcore /home/streamcore</div>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">CREATE DIRECTORY</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">sudo mkdir -p /home/streamcore
+                    cd /home/streamcore</div>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">VERIFY FILES</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">ls -la /home/streamcore
+                    ls -la /home/streamcore/backend /home/streamcore/frontend</div>
+            </div>
+
+            <!-- STEP 2: Install Base Packages -->
+            <h2><span class="step-number">02</span> Install System Dependencies</h2>
+            <div class="task-list">
+                <label class="task-item" data-id="m-2-1">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Install build tools and libraries</span>
+                </label>
+                <label class="task-item" data-id="m-2-2">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>(Optional) Open firewall ports (SSH/HTTP/HTTPS)</span>
+                </label>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">INSTALL DEPENDENCIES</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">sudo apt-get update -y
+                    sudo apt-get install -y curl ca-certificates gnupg openssl build-essential pkg-config
+                    libssl-dev
+                    libsqlite3-dev</div>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">FIREWALL (OPTIONAL)</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content"># If you use UFW
+                    sudo ufw allow 22/tcp
+                    sudo ufw allow 80/tcp
+                    sudo ufw allow 443/tcp
+                    sudo ufw status</div>
+            </div>
+
+            <!-- STEP 3: Install Node.js -->
+            <h2><span class="step-number">03</span> Install Node.js v20</h2>
+            <div class="task-list">
+                <label class="task-item" data-id="m-3-1">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Add NodeSource repository and install</span>
+                </label>
+                <label class="task-item" data-id="m-3-2">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Verify installation</span>
+                </label>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">INSTALL NODE.JS</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+                    sudo apt-get update -y
+                    sudo apt-get install -y nodejs
+                    node --version && npm --version</div>
+            </div>
+
+            <!-- STEP 4: Install Rust -->
+            <h2><span class="step-number">04</span> Install Rust & Cargo</h2>
+            <div class="task-list">
+                <label class="task-item" data-id="m-4-1">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Install Rust via rustup</span>
+                </label>
+                <label class="task-item" data-id="m-4-2">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Reload shell environment</span>
+                </label>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">INSTALL RUST</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s
+                    -- -y
+                    source $HOME/.cargo/env
+                    rustc --version && cargo --version</div>
+            </div>
+
+            <!-- STEP 5: Configure Backend -->
+            <h2><span class="step-number">05</span> Configure Backend</h2>
+            <div class="task-list">
+                <label class="task-item" data-id="m-5-1">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Navigate to backend directory</span>
+                </label>
+                <label class="task-item" data-id="m-5-2">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Create and edit <code>.env</code> file</span>
+                </label>
+                <label class="task-item" data-id="m-5-3">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Generate a secure <code>JWT_SECRET</code></span>
+                </label>
+                <label class="task-item" data-id="m-5-4">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Set production URLs and CORS</span>
+                </label>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">CONFIGURE BACKEND .ENV</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">cd /home/streamcore/backend
+                    cp .env.example .env
+                    nano .env</div>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">GENERATE JWT SECRET</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">openssl rand -hex 32</div>
+            </div>
+            <div class="alert alert-info">
+                <strong>Key variables to configure:</strong> <code>SERVER_ADDRESS</code>,
+                <code>PUBLIC_BASE_URL</code>,
+                <code>CORS_ALLOWED_ORIGINS</code>, <code>JWT_SECRET</code>,
+                <code>ADMIN_DEFAULT_PASSWORD</code>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">BACKEND .env (EXAMPLE)</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content"># Database
+                    DATABASE_URL=sqlite:./iptv.db
+
+                    # Server Configuration
+                    SERVER_ADDRESS=0.0.0.0:3000
+                    PUBLIC_BASE_URL=https://api.yourdomain.com
+
+                    # CORS (comma-separated allowed origins)
+                    CORS_ALLOWED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
+
+                    # Security (CHANGE THESE!)
+                    JWT_SECRET=your_generated_jwt_secret_min_32_chars
+                    ADMIN_DEFAULT_PASSWORD=your_secure_admin_password
+
+                    # App Settings
+                    SKIP_MIGRATIONS=false
+                    DEBUG_MODE=false
+                    RUST_LOG=iptv_backend=info,tower_http=warn,sqlx=warn
+
+                    # Backup
+                    BACKUP_ENABLED=true
+                    BACKUP_DIR=./backups
+                    BACKUP_RETENTION_DAYS=30
+                    BACKUP_INTERVAL_HOURS=24
+
+                    # Stripe Payments (Optional)
+                    STRIPE_SECRET_KEY=sk_test_placeholder
+                    STRIPE_WEBHOOK_SECRET=whsec_placeholder
+                    STRIPE_SUCCESS_URL=https://yourdomain.com/credits/success
+                    STRIPE_CANCEL_URL=https://yourdomain.com/credits/cancel
+                    STRIPE_CURRENCY=usd</div>
+            </div>
+
+            <!-- STEP 6: Build Backend -->
+            <h2><span class="step-number">06</span> Build Backend</h2>
+            <div class="task-list">
+                <label class="task-item" data-id="m-6-1">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Verify code compiles</span>
+                </label>
+                <label class="task-item" data-id="m-6-2">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Build release binary</span>
+                </label>
+                <label class="task-item" data-id="m-6-3">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Deploy binary</span>
+                </label>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">BUILD BACKEND</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">cd /home/streamcore/backend
+                    cargo check
+                    cargo build --release
+                    cp target/release/iptv-backend .
+                    chmod +x iptv-backend</div>
+            </div>
+
+            <!-- STEP 7: Configure Frontend -->
+            <h2><span class="step-number">07</span> Configure Frontend</h2>
+            <div class="task-list">
+                <label class="task-item" data-id="m-7-1">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Navigate to frontend directory</span>
+                </label>
+                <label class="task-item" data-id="m-7-2">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Create and edit <code>.env.local</code> file</span>
+                </label>
+                <label class="task-item" data-id="m-7-3">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Set <code>NEXT_PUBLIC_API_URL</code> to your backend URL</span>
+                </label>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">CONFIGURE FRONTEND .ENV.LOCAL</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">cd /home/streamcore/frontend
+                    cp .env.example .env.local
+                    nano .env.local</div>
+            </div>
+            <div class="alert alert-info">
+                <strong>Key variables to configure:</strong> <code>NEXT_PUBLIC_API_URL</code>,
+                <code>INTERNAL_API_URL</code>, <code>NEXT_PUBLIC_APP_NAME</code>,
+                <code>STREAMCORE_PROXY_ALLOWED_HOSTS</code>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">FRONTEND .env.local (EXAMPLE)</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content"># API Configuration
+                    NEXT_PUBLIC_API_URL=https://api.yourdomain.com
+                    INTERNAL_API_URL=http://127.0.0.1:3000
+
+                    # Branding
+                    NEXT_PUBLIC_APP_NAME=StreamCore
+
+                    # Debug (set to 'true' for dev)
+                    NEXT_PUBLIC_DEBUG_LOGS=false
+
+                    # Proxy Security Settings
+                    STREAMCORE_PROXY_ALLOWED_HOSTS=*
+                    STREAMCORE_PROXY_REQUIRE_AUTH=false
+                    STREAMCORE_PROXY_ALLOW_PRIVATE=true</div>
+            </div>
+
+            <!-- STEP 8: Build Frontend -->
+            <h2><span class="step-number">08</span> Build Frontend</h2>
+            <div class="task-list">
+                <label class="task-item" data-id="m-8-1">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Install dependencies</span>
+                </label>
+                <label class="task-item" data-id="m-8-2">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Build for production</span>
+                </label>
+                <label class="task-item" data-id="m-8-3">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>(Optional) Update core dependencies to patched versions</span>
+                </label>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">BUILD FRONTEND</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">cd /home/streamcore/frontend
+
+                    # Recommended (reproducible install with package-lock.json)
+                    npm ci
+
+                    # Optional (if you are installing an older release): keep current majors, patch minimums
+                    # npm install react@^19.1.2 react-dom@^19.1.2 next@^15.5.7 --no-fund --no-audit
+
+                    npm run build</div>
+            </div>
+
+            <!-- STEP 9: Create Systemd Services -->
+            <h2><span class="step-number">09</span> Create Systemd Services</h2>
+            <div class="task-list">
+                <label class="task-item" data-id="m-9-1">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Create backend service file</span>
+                </label>
+                <label class="task-item" data-id="m-9-2">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Create frontend service file</span>
+                </label>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">CREATE BACKEND SERVICE</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">sudo nano /etc/systemd/system/iptv-backend.service</div>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">/etc/systemd/system/iptv-backend.service</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">[Unit]
+                    Description=StreamCore Backend API
+                    After=network.target
+
+                    [Service]
+                    Type=simple
+                    User=streamcore
+                    Group=streamcore
+                    WorkingDirectory=/home/streamcore/backend
+                    EnvironmentFile=/home/streamcore/backend/.env
+                    ExecStart=/home/streamcore/backend/iptv-backend
+                    Restart=always
+                    RestartSec=5
+
+                    [Install]
+                    WantedBy=multi-user.target</div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">CREATE FRONTEND SERVICE</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">sudo nano /etc/systemd/system/streamcore-frontend.service</div>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">/etc/systemd/system/streamcore-frontend.service</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">[Unit]
+                    Description=StreamCore Frontend (Next.js)
+                    After=network.target
+
+                    [Service]
+                    Type=simple
+                    User=streamcore
+                    Group=streamcore
+                    WorkingDirectory=/home/streamcore/frontend
+                    EnvironmentFile=/home/streamcore/frontend/.env.local
+                    Environment=NODE_ENV=production
+                    ExecStart=/usr/bin/npm run start
+                    Restart=always
+                    RestartSec=5
+
+                    [Install]
+                    WantedBy=multi-user.target</div>
+            </div>
+            <div class="alert alert-warning">
+                <strong>Note:</strong> If you did not create the <code>streamcore</code> user, change
+                <code>User=</code>
+                and <code>Group=</code> to the account that owns <code>/home/streamcore</code> (or use
+                <code>root</code>).
+            </div>
+
+            <!-- STEP 10: Enable & Start -->
+            <h2><span class="step-number">10</span> Enable & Start Services</h2>
+            <div class="task-list">
+                <label class="task-item" data-id="m-10-1">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Reload systemd and enable services</span>
+                </label>
+                <label class="task-item" data-id="m-10-2">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Start services</span>
+                </label>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">ENABLE & START</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">sudo systemctl daemon-reload
+                    sudo systemctl enable iptv-backend streamcore-frontend
+                    sudo systemctl start iptv-backend streamcore-frontend</div>
+            </div>
+
+            <!-- STEP 11: Verify -->
+            <h2><span class="step-number">11</span> Verify Installation</h2>
+            <div class="task-list">
+                <label class="task-item" data-id="m-11-1">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Check service status</span>
+                </label>
+                <label class="task-item" data-id="m-11-2">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Verify backend health endpoint</span>
+                </label>
+                <label class="task-item" data-id="m-11-3">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Verify frontend responds</span>
+                </label>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">CHECK STATUS</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">sudo systemctl status iptv-backend
+                    sudo systemctl status streamcore-frontend</div>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">HEALTH CHECK</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">curl -fsS http://127.0.0.1:3000/api/health</div>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">FRONTEND CHECK</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">curl -I http://127.0.0.1:5000</div>
+            </div>
+
+            <h3>Useful Commands</h3>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">LOGS & RESTART</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content"># View live logs
+                    sudo journalctl -u iptv-backend -f
+                    sudo journalctl -u streamcore-frontend -f
+
+                    # Restart services
+                    sudo systemctl restart iptv-backend
+                    sudo systemctl restart streamcore-frontend</div>
+            </div>
+
+            <div class="alert alert-success">
+                <strong>Next Step:</strong> Configure your reverse proxy (Nginx/Apache) to point your domain
+                to
+                <code>localhost:3000</code> (backend) and <code>localhost:5000</code> (frontend).
+            </div>
+
+            <h2><span class="step-number">12</span> Reverse Proxy (Optional, Recommended)</h2>
+            <div class="alert alert-info">
+                <strong>Recommended setup:</strong> Serve the frontend on
+                <code>https://yourdomain.com</code> and
+                the
+                backend API on <code>https://api.yourdomain.com</code>.
+            </div>
+            <div class="task-list">
+                <label class="task-item" data-id="m-12-1">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Install Nginx</span>
+                </label>
+                <label class="task-item" data-id="m-12-2">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Create Nginx site config</span>
+                </label>
+                <label class="task-item" data-id="m-12-3">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Enable site and reload Nginx</span>
+                </label>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">INSTALL NGINX</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">sudo apt-get update -y
+                    sudo apt-get install -y nginx</div>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">CREATE CONFIG FILE</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">sudo nano /etc/nginx/sites-available/streamcore</div>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">/etc/nginx/sites-available/streamcore</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content"># Frontend: yourdomain.com -> localhost:5000
+                    server {
+                    listen 80;
+                    server_name yourdomain.com;
+                    location / {
+                    proxy_pass http://127.0.0.1:5000;
+                    proxy_set_header Host $host;
+                    proxy_set_header X-Real-IP $remote_addr;
+                    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                    proxy_set_header X-Forwarded-Proto $scheme;
+                    }
+                    }
+
+                    # Backend API: api.yourdomain.com -> localhost:3000
+                    server {
+                    listen 80;
+                    server_name api.yourdomain.com;
+                    location / {
+                    proxy_pass http://127.0.0.1:3000;
+                    proxy_set_header Host $host;
+                    proxy_set_header X-Real-IP $remote_addr;
+                    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                    proxy_set_header X-Forwarded-Proto $scheme;
+                    }
+                    }</div>
+            </div>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">ENABLE & RELOAD</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">sudo ln -sf /etc/nginx/sites-available/streamcore
+                    /etc/nginx/sites-enabled/streamcore
+                    sudo nginx -t
+                    sudo systemctl reload nginx</div>
+            </div>
+            <div class="alert alert-warning">
+                <strong>HTTPS:</strong> Add DNS records for your domain(s) and issue TLS certificates (e.g.,
+                Certbot)
+                before using this in production.
+            </div>
+        </div>
+
+        <!-- ANDROID TAB -->
+        <div id="tab-android" class="tab-content">
+            <div class="content-header">
+                <h1>Android App Configuration</h1>
+                <p class="subtitle">Configure the Android app to connect to your backend and customize branding.</p>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Prerequisites:</strong> You need <a href="https://developer.android.com/studio" target="_blank"
+                    style="color: var(--sky-400);">Android Studio</a> installed to build the app. The Android app source
+                code is located in <code>Apps/android_app/</code>.
+            </div>
+
+            <!-- STEP 1: Open Project -->
+            <h2><span class="step-number">1</span> Open Project in Android Studio</h2>
+            <div class="task-list">
+                <label class="task-item" data-id="a-1-1">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Open Android Studio</span>
+                </label>
+                <label class="task-item" data-id="a-1-2">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Select <strong>Open Project</strong> and navigate to <code>Apps/android_app/</code></span>
+                </label>
+                <label class="task-item" data-id="a-1-3">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Wait for Gradle sync to complete</span>
+                </label>
+            </div>
+
+            <!-- STEP 2: Configure local.properties -->
+            <h2><span class="step-number">2</span> Configure Backend URL & App Name</h2>
+            <p>The app uses <code>local.properties</code> to configure the backend URL and app branding. Copy the
+                template and edit:</p>
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">Terminal (in android_app folder)</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">cp local.properties.template local.properties</div>
+            </div>
+
+            <div class="task-list">
+                <label class="task-item" data-id="a-2-1">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Copy <code>local.properties.template</code> to <code>local.properties</code></span>
+                </label>
+                <label class="task-item" data-id="a-2-2">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Set <code>backend.url</code> to your backend server URL</span>
+                </label>
+                <label class="task-item" data-id="a-2-3">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Set <code>branding.name</code> to your app name</span>
+                </label>
+            </div>
+
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">local.properties</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content"># Android SDK (auto-configured by Android Studio)
+                    # sdk.dir=/path/to/your/android/sdk
+
+                    # ===========================================
+                    # BRANDING CONFIGURATION
+                    # ===========================================
+                    # App name displayed throughout the application
+                    branding.name=YourAppName
+
+                    # ===========================================
+                    # BACKEND URL CONFIGURATION
+                    # ===========================================
+                    # Set your backend server URL (without /api suffix)
+                    # Examples:
+                    # Development (emulator): http://10.0.2.2:3000
+                    # Production: https://api.yourdomain.com
+                    # Local network: http://192.168.1.100:3000
+                    backend.url=https://api.yourdomain.com</div>
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>Important:</strong> For emulator testing, use <code>http://10.0.2.2:3000</code> (maps to host
+                machine's localhost). For production, use your HTTPS backend URL.
+            </div>
+
+            <div class="premium-card">
+                <h3 style="margin-top: 0;">🔧 Generated Build Config Fields</h3>
+                <p>These values are automatically generated from <code>local.properties</code>:</p>
+                <ul>
+                    <li><code>BuildConfig.BRANDING_NAME</code> → From <code>branding.name</code></li>
+                    <li><code>BuildConfig.API_BASE_URL</code> → <code>backend.url + "/api/"</code></li>
+                    <li><code>BuildConfig.STREAM_BASE_URL</code> → <code>backend.url + "/stream/"</code></li>
+                    <li><code>R.string.branding_name</code> → For XML resource usage</li>
+                </ul>
+            </div>
+
+            <!-- STEP 3: Customize App Icon -->
+            <h2><span class="step-number">3</span> Customize App Icon (Launcher)</h2>
+            <p>Replace the app icon by modifying files in the <code>res/</code> directory:</p>
+            <div class="task-list">
+                <label class="task-item" data-id="a-3-1">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Replace <code>ic_launcher_foreground.xml</code> or PNG files</span>
+                </label>
+                <label class="task-item" data-id="a-3-2">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Update background color in <code>ic_launcher_background.xml</code></span>
+                </label>
+            </div>
+
+            <div class="premium-card">
+                <h3 style="margin-top: 0;">📁 Icon File Locations</h3>
+                <table style="width: 100%; font-size: 13px; color: var(--slate-300);">
+                    <tr style="border-bottom: 1px solid var(--slate-700);">
+                        <td style="padding: 8px 0;"><strong>File</strong></td>
+                        <td style="padding: 8px 0;"><strong>Path</strong></td>
+                        <td style="padding: 8px 0;"><strong>Description</strong></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--slate-800);">
+                        <td style="padding: 8px 0;"><code>ic_launcher_foreground.xml</code></td>
+                        <td style="padding: 8px 0;"><code>res/drawable/</code></td>
+                        <td style="padding: 8px 0;">Vector foreground icon</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--slate-800);">
+                        <td style="padding: 8px 0;"><code>ic_launcher_background.xml</code></td>
+                        <td style="padding: 8px 0;"><code>res/drawable/</code></td>
+                        <td style="padding: 8px 0;">Background color/gradient</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--slate-800);">
+                        <td style="padding: 8px 0;"><code>ic_launcher.png</code></td>
+                        <td style="padding: 8px 0;"><code>res/mipmap-*/</code></td>
+                        <td style="padding: 8px 0;">PNG icons (multiple sizes)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0;"><code>ic_launcher.xml</code></td>
+                        <td style="padding: 8px 0;"><code>res/mipmap-anydpi-v26/</code></td>
+                        <td style="padding: 8px 0;">Adaptive icon definition</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Tip:</strong> Use Android Studio's <strong>Image Asset Studio</strong> (Right-click on
+                <code>res</code> → New → Image Asset) to generate all required icon sizes automatically from a single
+                source image.
+            </div>
+
+            <!-- STEP 4: Customize Colors -->
+            <h2><span class="step-number">4</span> Customize Theme Colors</h2>
+            <p>Modify the app's color scheme by editing the theme files:</p>
+            <div class="task-list">
+                <label class="task-item" data-id="a-4-1">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Edit colors in <code>res/values/colors.xml</code> (if present)</span>
+                </label>
+                <label class="task-item" data-id="a-4-2">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Update Jetpack Compose theme in <code>ui/theme/</code> directory</span>
+                </label>
+            </div>
+
+            <div class="premium-card">
+                <h3 style="margin-top: 0;">🎨 Key Color Locations</h3>
+                <ul>
+                    <li><strong>Icon foreground:</strong> <code>res/drawable/ic_launcher_foreground.xml</code> →
+                        <code>android:fillColor</code>
+                    </li>
+                    <li><strong>Compose Theme:</strong> <code>app/src/main/java/.../ui/theme/Color.kt</code></li>
+                    <li><strong>Compose Theme:</strong> <code>app/src/main/java/.../ui/theme/Theme.kt</code></li>
+                </ul>
+            </div>
+
+            <!-- STEP 5: Change Package Name -->
+            <h2><span class="step-number">5</span> Change Package Name (Optional)</h2>
+            <p>To publish under your own package name (for Play Store):</p>
+            <div class="task-list">
+                <label class="task-item" data-id="a-5-1">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Update <code>applicationId</code> in <code>app/build.gradle</code></span>
+                </label>
+                <label class="task-item" data-id="a-5-2">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Refactor package name in source files (use Android Studio refactor tool)</span>
+                </label>
+            </div>
+
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">app/build.gradle (defaultConfig section)</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">defaultConfig {
+                    applicationId "com.yourcompany.yourapp"
+                    minSdk 24
+                    targetSdk 35
+                    versionCode 1
+                    versionName "1.0.0"
+                    // ...
+                    }</div>
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>Refactoring:</strong> In Android Studio, right-click on the package
+                <code>com.iptv.android</code> in the Project view → Refactor → Rename. This will update all references
+                throughout the codebase.
+            </div>
+
+            <!-- STEP 6: Build APK -->
+            <h2><span class="step-number">6</span> Build the APK</h2>
+            <div class="task-list">
+                <label class="task-item" data-id="a-6-1">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Build Debug APK for testing</span>
+                </label>
+                <label class="task-item" data-id="a-6-2">
+                    <input type="checkbox" class="task-checkbox">
+                    <span>Build Release APK for distribution</span>
+                </label>
+            </div>
+
+            <div class="premium-card">
+                <h3 style="margin-top: 0;">📦 Build Options</h3>
+                <p><strong>Debug Build:</strong> Menu → Build → Build Bundle(s) / APK(s) → Build APK(s)</p>
+                <p><strong>Release Build:</strong> Menu → Build → Generate Signed Bundle / APK</p>
+                <p style="margin-top: 12px; color: var(--slate-400);">Output location:
+                    <code>app/build/outputs/apk/</code>
+                </p>
+            </div>
+
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">Command Line Build (Debug)</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">./gradlew assembleDebug</div>
+            </div>
+
+            <div class="command-block">
+                <div class="command-header">
+                    <span class="command-label">Command Line Build (Release)</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <div class="code-content">./gradlew assembleRelease</div>
+            </div>
+
+            <div class="alert alert-success">
+                <strong>Done!</strong> Your customized Android app is ready. Install the APK on your Android device or
+                publish to the Play Store.
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PROGRESS FOOTER -->
+    <div class="progress-footer">
+        <div class="progress-container">
+            <div class="progress-info">
+                <span>INSTALLATION PROGRESS</span>
+                <span id="progress-text">0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-fill"></div>
+            </div>
+        </div>
+        <a class="reset-link" onclick="resetProgress()">Reset Progress</a>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'streamcore-install-progress';
+
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+            // Show selected
+            document.getElementById('tab-' + tabId).classList.add('active');
+            document.getElementById('nav-' + tabId).classList.add('active');
+        }
+
+        function copyCode(btn) {
+            const content = btn.parentElement.nextElementSibling.innerText;
+            navigator.clipboard.writeText(content).then(() => {
+                const original = btn.innerText;
+                btn.innerText = 'Copied!';
+                btn.style.color = '#10b981';
+                btn.style.borderColor = '#10b981';
+                setTimeout(() => {
+                    btn.innerText = original;
+                    btn.style.color = '';
+                    btn.style.borderColor = '';
+                }, 2000);
+            });
+        }
+
+        // Generate random JWT secret
+        function generateJWT() {
+            const array = new Uint8Array(32);
+            crypto.getRandomValues(array);
+            const jwt = Array.from(array, b => b.toString(16).padStart(2, '0')).join('');
+            document.getElementById('env-jwt').value = jwt;
+            updateEnvOutput();
+        }
+
+        // Generate complete .env file
+        function updateEnvOutput() {
+            const frontendDomain = document.getElementById('env-frontend-domain').value || 'yourdomain.com';
+            const backendDomain = document.getElementById('env-backend-domain').value || 'api.yourdomain.com';
+            const email = document.getElementById('env-email').value || 'admin@yourdomain.com';
+            const jwt = document.getElementById('env-jwt').value || 'change_me_in_production_min_32_chars';
+            const adminPassword = document.getElementById('env-admin-password').value || 'change_me_in_production';
+            const appName = document.getElementById('env-app-name').value || 'StreamCore';
+            const mode = document.querySelector('input[name="env-mode"]:checked').value;
+
+            const envContent = `# =============================================
+# STREAMCORE CONFIGURATION
+# =============================================
+# Generated by StreamCore Installation Guide
+# Run: docker compose up -d --build
+# =============================================
+
+# =============================================
+# NGINX PROXY (Automatic SSL)
+# =============================================
+${mode ? 'COMPOSE_PROFILES=proxy' : '# COMPOSE_PROFILES=proxy  # Uncomment for production'}
+
+# =============================================
+# DOMAINS (Required when proxy is enabled)
+# =============================================
+FRONTEND_DOMAIN=${frontendDomain}
+BACKEND_DOMAIN=${backendDomain}
+LETSENCRYPT_EMAIL=${email}
+
+# =============================================
+# APP BRANDING
+# =============================================
+APP_NAME=${appName}
+
+# =============================================
+# SECURITY
+# =============================================
+JWT_SECRET=${jwt}
+ADMIN_DEFAULT_PASSWORD=${adminPassword}
+
+# =============================================
+# DATABASE
+# =============================================
+DATABASE_URL=sqlite:/data/iptv.db
+
+# =============================================
+# BACKUP CONFIGURATION
+# =============================================
+BACKUP_ENABLED=true
+BACKUP_DIR=/data/backups
+BACKUP_RETENTION_DAYS=30
+BACKUP_INTERVAL_HOURS=24
+
+# =============================================
+# STRIPE PAYMENTS
+# =============================================
+STRIPE_SECRET_KEY=sk_test_placeholder
+STRIPE_WEBHOOK_SECRET=whsec_placeholder
+STRIPE_CURRENCY=usd
+
+# =============================================
+# APP CONFIG
+# =============================================
+CONTENT_OVERVIEW_MULTIPLIER=x1
+SKIP_MIGRATIONS=false
+DEBUG_MODE=false
+
+# =============================================
+# LOGGING
+# =============================================
+RUST_LOG=iptv_backend=info,tower_http=warn,sqlx=warn
+
+# =============================================
+# FRONTEND PROXY SETTINGS
+# =============================================
+STREAMCORE_PROXY_ALLOWED_HOSTS=*
+STREAMCORE_PROXY_REQUIRE_AUTH=false
+STREAMCORE_PROXY_ALLOW_PRIVATE=true`;
+
+            document.getElementById('env-output').textContent = envContent;
+        }
+
+        // Progress Logic
+        function loadProgress() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                const completed = JSON.parse(saved);
+                completed.forEach(id => {
+                    const checkbox = document.querySelector(`.task-item[data-id="${id}"] input`);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                        checkbox.closest('.task-item').classList.add('completed');
+                    }
+                });
+            }
+            updateProgressBar();
+        }
+
+        function saveProgress() {
+            const completed = [];
+            document.querySelectorAll('.task-item input:checked').forEach(cb => {
+                completed.push(cb.closest('.task-item').dataset.id);
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(completed));
+            updateProgressBar();
+        }
+
+        function updateProgressBar() {
+            const total = document.querySelectorAll('.task-item').length;
+            const completed = document.querySelectorAll('.task-item input:checked').length;
+            const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+
+            document.getElementById('progress-fill').style.width = percent + '%';
+            document.getElementById('progress-text').textContent = percent + '%';
+        }
+
+        function resetProgress() {
+            if (confirm('Reset all progress?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                document.querySelectorAll('.task-item input').forEach(cb => {
+                    cb.checked = false;
+                    cb.closest('.task-item').classList.remove('completed');
+                });
+                updateProgressBar();
+            }
+        }
+
+        // Init
+        document.querySelectorAll('.task-item input').forEach(cb => {
+            cb.addEventListener('change', function () {
+                if (this.checked) {
+                    this.closest('.task-item').classList.add('completed');
+                } else {
+                    this.closest('.task-item').classList.remove('completed');
+                }
+                saveProgress();
+            });
+        });
+
+        // Default Tab
+        switchTab('docker');
+        loadProgress();
+
+        // ============================================
+        // DOMAIN CONFIGURATION LOGIC
+        // ============================================
+        const DOMAIN_STORAGE_KEY = 'streamcore-domain-config';
+        const DEFAULT_BACKEND_DOMAIN = 'api.yourdomain.com';
+        const DEFAULT_FRONTEND_DOMAIN = 'yourdomain.com';
+
+        function loadDomains() {
+            const saved = localStorage.getItem(DOMAIN_STORAGE_KEY);
+            if (saved) {
+                const { backend, frontend } = JSON.parse(saved);
+                document.getElementById('backend-domain').value = backend;
+                document.getElementById('frontend-domain').value = frontend;
+                updateAllCodeExamples(backend, frontend);
+            }
+        }
+
+        function saveDomains() {
+            const backend = document.getElementById('backend-domain').value.trim() || DEFAULT_BACKEND_DOMAIN;
+            const frontend = document.getElementById('frontend-domain').value.trim() || DEFAULT_FRONTEND_DOMAIN;
+
+            localStorage.setItem(DOMAIN_STORAGE_KEY, JSON.stringify({ backend, frontend }));
+            updateAllCodeExamples(backend, frontend);
+
+            // Show save indicator
+            const indicator = document.getElementById('save-indicator');
+            indicator.style.display = 'inline';
+            setTimeout(() => {
+                indicator.style.display = 'none';
+            }, 2000);
+        }
+
+        function resetDomains() {
+            if (confirm('Reset domains to defaults?')) {
+                localStorage.removeItem(DOMAIN_STORAGE_KEY);
+                document.getElementById('backend-domain').value = DEFAULT_BACKEND_DOMAIN;
+                document.getElementById('frontend-domain').value = DEFAULT_FRONTEND_DOMAIN;
+                updateAllCodeExamples(DEFAULT_BACKEND_DOMAIN, DEFAULT_FRONTEND_DOMAIN);
+            }
+        }
+
+        function updateAllCodeExamples(backendDomain, frontendDomain) {
+            // Update all code content blocks
+            document.querySelectorAll('.code-content').forEach(block => {
+                let content = block.textContent;
+
+                // Replace backend domain references
+                content = content.replace(/api\.yourdomain\.com/g, backendDomain);
+                content = content.replace(/https:\/\/api\.yourdomain\.com/g, `https://${backendDomain}`);
+                content = content.replace(/http:\/\/api\.yourdomain\.com/g, `http://${backendDomain}`);
+
+                // Replace frontend domain references
+                content = content.replace(/yourdomain\.com/g, frontendDomain);
+                content = content.replace(/www\.yourdomain\.com/g, `www.${frontendDomain}`);
+                content = content.replace(/https:\/\/yourdomain\.com/g, `https://${frontendDomain}`);
+                content = content.replace(/http:\/\/yourdomain\.com/g, `http://${frontendDomain}`);
+
+                // Fix double replacements (when yourdomain.com was already replaced in api.yourdomain.com)
+                content = content.replace(new RegExp(`api\\.${frontendDomain}`, 'g'), backendDomain);
+                content = content.replace(new RegExp(`https://api\\.${frontendDomain}`, 'g'), `https://${backendDomain}`);
+                content = content.replace(new RegExp(`http://api\\.${frontendDomain}`, 'g'), `http://${backendDomain}`);
+
+                block.textContent = content;
+            });
+
+            // Update alert/info box references
+            document.querySelectorAll('.alert').forEach(alert => {
+                let html = alert.innerHTML;
+
+                html = html.replace(/api\.yourdomain\.com/g, backendDomain);
+                html = html.replace(/yourdomain\.com/g, frontendDomain);
+                html = html.replace(/www\.yourdomain\.com/g, `www.${frontendDomain}`);
+
+                // Fix double replacements
+                html = html.replace(new RegExp(`api\\.${frontendDomain}`, 'g'), backendDomain);
+
+                alert.innerHTML = html;
+            });
+        }
+
+        // Auto-save on Enter key
+        document.getElementById('backend-domain').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                saveDomains();
+            }
+        });
+
+        document.getElementById('frontend-domain').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                saveDomains();
+            }
+        });
+
+        // Load saved domains on page load
+        loadDomains();
+
+    </script>
+</body>
+
+</html>
